@@ -1,0 +1,26 @@
+本项目只适用于微信版本 6.5.4
+
+一套微信hook，使用web socket来进行通信的，调微信功能的系统
+
+* 使用方法
+导入 compile 'com.th.wx:wx_xposed:1.8.0'
+** 微信端
+在xposed的hook方法中
+- 调用 =WxXposedLib.quickInit(ClassLoader wxClassLoader, int port)= 来进行初始化
+传入ClassLoader和端口号即可
+
+** 客户端
+使用=new Sender(int port)=来进行初始化客户端，然后调用=Sender.send(BaseReqeust request)=来发送请求
+
+* FAQ
+- 为什么没有将客户端和服务端分开？
+这里没有将微信（服务）端和客户端分开，是因为代码量不多，而且基本不会增加不必要的依赖（xposed是用provide方式提供的）
+
+* TODOS
+- 考虑加入一个默认的port。如果发现默认的port被占用了，就认为其他的应用已经将服务端开启了？
+
+** Orders
+- =AllLoginRequest= 实现多个平台的扫码登录，确认过程
+- =SendHttpRequest= 发送http请求，补全a8key，获取返回内容
+- 发送信息（群和联系人）
+- 发送图片（群和联系人）
