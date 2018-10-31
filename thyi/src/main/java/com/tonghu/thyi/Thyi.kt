@@ -17,6 +17,8 @@ import io.reactivex.schedulers.Schedulers
 
 import io.reactivex.Observable.create
 import okhttp3.*
+import java.io.File
+import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
 /**
@@ -76,6 +78,13 @@ class Thyi {
         return request("GET", url, param, Bitmap::class.java)
     }
 
+    /**
+     * 下载文件
+     */
+    fun requestFile(url: String): Observable<InputStream> {
+        return requestInternal("GET", url, emptyMap(), InputStream::class.java)
+    }
+
     private fun <T> requestInternal(method: String, url: String,
                                     param: Map<String, String>?, clazz: Class<T>): Observable<T> {
         val postBuilder = FormBody.Builder()
@@ -126,6 +135,10 @@ class Thyi {
             try {
                 val response = okClient!!.newCall(request).execute()
                 when (clazz) {
+                    InputStream::class.java -> {
+                        e.onNext(response.body()!!.byteStream() as T)
+                        e.onComplete()
+                    }
                     Response::class.java -> {
                         e.onNext(response as T)
                         e.onComplete()
