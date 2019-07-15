@@ -1,7 +1,9 @@
+#+MACRO: imglnk @@html:<a href="$1"><img src="$2"></a>@@
+
 网络请求 OkHttp 的基本封装
 
 * 使用方法
-  file:https://api.bintray.com/packages/huhuang03/maven/thyi/images/download.svg
+  [[https://api.bintray.com/packages/huhuang03/maven/thyi/images/download.svg]]
 #+BEGIN_SRC gradle
 implemention 'com.th.android:thyi:1.x.x'
 #+END_SRC
