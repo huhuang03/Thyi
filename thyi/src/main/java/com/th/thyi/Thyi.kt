@@ -3,22 +3,17 @@ package com.th.thyi
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
-
 import com.google.gson.Gson
-
-import org.json.JSONObject
-
-import java.net.URL
-
 import io.reactivex.Observable
+import io.reactivex.Observable.create
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-
-import io.reactivex.Observable.create
 import okhttp3.*
-import java.io.File
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import org.json.JSONObject
 import java.io.InputStream
+import java.net.URL
 import java.util.concurrent.TimeUnit
 
 /**
@@ -30,7 +25,7 @@ import java.util.concurrent.TimeUnit
  */
 class Thyi {
     private var okClient: OkHttpClient? = null
-    private val JSON = MediaType.parse("application/json; charset=utf-8")
+    private val JSON = "application/json; charset=utf-8".toMediaTypeOrNull()
     private lateinit var options: ThyiOptions
 
     @JvmOverloads constructor(cookieJar: CookieJar = CookieJar.NO_COOKIES, options: ThyiOptions = ThyiOptions()) {
@@ -42,14 +37,12 @@ class Thyi {
 
     /**
      * 使用CookieJar
+     * Will be delete soon
      */
     @Deprecated("")
     constructor(okClient: OkHttpClient) {
         this.okClient = okClient
-    }
-
-    init {
-        this.okClient?.connectTimeoutMillis()
+        throw Exception("this constructor is deprecated")
     }
 
     @JvmOverloads fun<T> get(url: String, params: Map<String, String> = emptyMap(), clazz: Class<T>): Observable<T> {
@@ -98,7 +91,7 @@ class Thyi {
             if (param != null) {
                 for (key in param.keys) {
                     if (param[key] != null) {
-                        postBuilder.add(key, param[key])
+                        postBuilder.add(key, param[key]!!)
                     }
                 }
             }
@@ -130,13 +123,13 @@ class Thyi {
     }
 
     fun <T> request(request: Request, clazz: Class<T>): Observable<T> {
-        Log.i(TAG, "send: " + request.url().toString())
+        Log.i(TAG, "send: " + request.url.toString())
         val onSubsribe = ObservableOnSubscribe<T> { e ->
             try {
                 val response = okClient!!.newCall(request).execute()
                 when (clazz) {
                     InputStream::class.java -> {
-                        e.onNext(response.body()!!.byteStream() as T)
+                        e.onNext(response.body!!.byteStream() as T)
                         e.onComplete()
                     }
                     Response::class.java -> {
@@ -144,7 +137,7 @@ class Thyi {
                         e.onComplete()
                     }
                     Bitmap::class.java -> {
-                        val inputStream = response.body()!!.byteStream()
+                        val inputStream = response.body!!.byteStream()
                         var bitmap: Bitmap? = BitmapFactory.decodeStream(inputStream)
                         if (bitmap == null) {
                             bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565)
@@ -153,8 +146,8 @@ class Thyi {
                         e.onComplete()
                     }
                     else -> {
-                        val rst = response.body()!!.string()
-                        Log.i(TAG, "rst: " + rst + "\n\t for url: " + request.url())
+                        val rst = response.body!!.string()
+                        Log.i(TAG, "rst: " + rst + "\n\t for url: " + request.url)
                         val bean: T
 
                         bean = when (clazz) {
