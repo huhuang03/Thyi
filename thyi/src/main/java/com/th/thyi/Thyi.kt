@@ -126,7 +126,9 @@ class Thyi {
         Log.i(TAG, "send: " + request.url.toString())
         val onSubsribe = ObservableOnSubscribe<T> { e ->
             try {
+                Log.i(TAG, "send on thread; ${Thread.currentThread().name}")
                 val response = okClient!!.newCall(request).execute()
+                Log.i(TAG, "onResponse")
                 when (clazz) {
                     InputStream::class.java -> {
                         e.onNext(response.body!!.byteStream() as T)
