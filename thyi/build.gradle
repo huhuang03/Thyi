@@ -65,7 +65,7 @@ publish {
     userOrg = 'huhuang03'
     groupId = 'com.th.android'
     artifactId = 'thyi'
-    publishVersion = '1.6.6'
+    publishVersion = '1.6.8'
     desc = 'Bitmap error'
     website = 'github?'
 }

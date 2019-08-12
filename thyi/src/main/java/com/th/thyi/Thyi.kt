@@ -63,8 +63,8 @@ class Thyi {
         return request("POST", url, params, clazz)
     }
 
-    fun <T> request(method: String, url: String, params: Map<String, String>?, clazz: Class<T>): Observable<T> {
-        return requestInternal(method, url, params, clazz)
+    fun <T> request(method: String, url: String, params: Map<String, String>?, clazz: Class<T>, headers: Map<String, String> = emptyMap()): Observable<T> {
+        return requestInternal(method, url, params, clazz, headers)
     }
 
     fun requestImage(url: String, param: Map<String, String>): Observable<Bitmap> {
@@ -75,11 +75,12 @@ class Thyi {
      * 下载文件
      */
     fun requestFile(url: String): Observable<InputStream> {
-        return requestInternal("GET", url, emptyMap(), InputStream::class.java)
+        return requestInternal("GET", url, emptyMap(), InputStream::class.java, emptyMap())
     }
 
     private fun <T> requestInternal(method: String, url: String,
-                                    param: Map<String, String>?, clazz: Class<T>): Observable<T> {
+                                    param: Map<String, String>?, clazz: Class<T>,
+                                    headers: Map<String, String>): Observable<T> {
         val postBuilder = FormBody.Builder()
 
         var finalUrl = url
@@ -110,6 +111,10 @@ class Thyi {
                 .url(finalUrl)
                 .header("referer", refer)
                 .header("user-agent", "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Mobile Safari/537.36")
+
+        for (header in headers) {
+            rb.header(header.key, header.value)
+        }
 
         if (!"GET".equals(method, true)) {
             rb.post(postBuilder.build())
