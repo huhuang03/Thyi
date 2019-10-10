@@ -5,5 +5,5 @@
 * 使用方法
   [[https://api.bintray.com/packages/huhuang03/maven/thyi/images/download.svg]]
 #+BEGIN_SRC gradle
-implemention 'com.th.android:thyi:1.x.x'
+implementation 'com.th.android:thyi:1.x.x'
 #+END_SRC
