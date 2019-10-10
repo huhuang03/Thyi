@@ -66,7 +66,7 @@ class Thyi {
         return requestInternal(method, url, params, clazz, headers)
     }
 
-    fun requestImage(url: String, param: Map<String, String>): Observable<Bitmap> {
+    fun requestImage(url: String, param: Map<String, String> = emptyMap()): Observable<Bitmap> {
         return request("GET", url, param, Bitmap::class.java)
     }
 
