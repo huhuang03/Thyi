@@ -7,3 +7,7 @@
 #+BEGIN_SRC gradle
 implementation 'com.th.android:thyi:1.x.x'
 #+END_SRC
+
+** persistant cookie jar
+you can use this cookie lib to automatic handle cookie.
+https://github.com/franmontiel/PersistentCookieJar
