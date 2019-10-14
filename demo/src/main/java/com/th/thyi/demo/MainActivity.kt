@@ -11,7 +11,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        thyi.request("http://192.168.1.176:6002/api/public/registerOrLogin", emptyMap(), String::class.java)
-                .subscribe({ Log.i("tonghu", it) }, { Log.i("tonghu", Log.getStackTraceString(it)) }, { Log.i("tonghu", "onFinish") })
+        thyi.request("http://www.baidu.com", emptyMap(), String::class.java)
+                .map {
+                    Log.i("tonghu", "Thread; ${Thread.currentThread().name}")
+                    it
+                }
+                .subscribe({ }, { Log.i("tonghu", Log.getStackTraceString(it)) }, { Log.i("tonghu", "onFinish") })
     }
 }

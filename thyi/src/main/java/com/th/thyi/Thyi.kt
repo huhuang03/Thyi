@@ -160,7 +160,7 @@ class Thyi {
                             String::class.java -> rst as T
                             JSONObject::class.java -> JSONObject(rst) as T
                             else ->  {
-                                if (rst == null || rst == "") {
+                                if (rst == "") {
                                     clazz.newInstance()
                                 } else {
                                     Gson().fromJson(rst, clazz)
@@ -179,9 +179,9 @@ class Thyi {
                 e.onComplete()
             }
         }
-        val subscribeOn = create(onSubsribe).subscribeOn(Schedulers.io())
+        var subscribeOn = create(onSubsribe).subscribeOn(Schedulers.io())
         if (options.autoCallbackOnMain) {
-            subscribeOn.observeOn(AndroidSchedulers.mainThread())
+            subscribeOn = subscribeOn.observeOn(AndroidSchedulers.mainThread())
         }
         return subscribeOn
     }
