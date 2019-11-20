@@ -39,15 +39,14 @@ buildscript {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api('com.squareup.okhttp3:okhttp:3.12.3') { setTransitive(true) }
-
     api('io.reactivex.rxjava2:rxandroid:2.0.1') { setTransitive(true) }
     api('io.reactivex.rxjava2:rxjava:2.1.0') { setTransitive(true) }
     api('com.google.code.gson:gson:2.6.2') { setTransitive(true) }
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 apply plugin: 'com.novoda.bintray-release'

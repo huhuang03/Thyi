@@ -4,6 +4,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.google.gson.Gson
+import com.th.thyi.annotation.FIELD
+import com.th.thyi.annotation.HEADER
+import com.th.thyi.annotation.POST
 import io.reactivex.Observable
 import io.reactivex.Observable.create
 import io.reactivex.ObservableOnSubscribe
@@ -22,7 +25,7 @@ import java.util.concurrent.TimeUnit
  * 可以设置TAG。来改变输出的tag
  * Created by yi on 2/22/16.
  */
-class Thyi {
+class Thyi_Old {
     private var okClient: OkHttpClient? = null
     private val JSON = MediaType.parse("application/json; charset=utf-8")
     private lateinit var options: ThyiOptions
