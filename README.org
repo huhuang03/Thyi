@@ -1,13 +1,37 @@
 #+MACRO: imglnk @@html:<a href="$1"><img src="$2"></a>@@
 
-网络请求 OkHttp 的基本封装
+A helper to use okhttp lib
 
-* 使用方法
+* Install
   [[https://api.bintray.com/packages/huhuang03/maven/thyi/images/download.svg]]
 #+BEGIN_SRC gradle
 implementation 'com.th.android:thyi:1.x.x'
 #+END_SRC
 
-** persistant cookie jar
-you can use this cookie lib to automatic handle cookie.
-https://github.com/franmontiel/PersistentCookieJar
+* Usage
+Provide two way to use.
+** use api define
+1. define a Api interface
+#+BEGIN_SRC java
+  interface Api {
+      @GET("/user")
+      void getUser(@QUERY("id") id: Int): Observable<User>
+  }
+#+END_SRC
+
+2. use this lib to create the implements
+#+BEGIN_SRC java
+val api = new Thyi(basUrl).create(Api::class.java)
+#+END_SRC
+
+3. now you can use api
+#+BEGIN_SRC java
+api.getUser().map{updateUserUi(it)}.subscribe()
+#+END_SRC
+
+** direct request
+#+BEGIN_SRC 
+var thyi = Thyi();
+thyi.request(request, rstType: Class).map{doSomething()}.subscirbe()
+#+END_SRC
+
