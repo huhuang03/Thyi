@@ -1,6 +1,6 @@
 #+MACRO: imglnk @@html:<a href="$1"><img src="$2"></a>@@
 
-A helper to use okhttp lib
+okhttp wrapper
 
 * Install
   [[https://api.bintray.com/packages/huhuang03/maven/thyi/images/download.svg]]

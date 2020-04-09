@@ -18,9 +18,10 @@ import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
 class Thyi(var baseUrl: String = "",
-           var client: OkHttpClient = OkHttpClient.Builder()
+           var okhttp: OkHttpClient = OkHttpClient.Builder()
                    .readTimeout(20, TimeUnit.SECONDS)
                    .build()) {
+
     companion object {
         const val TAG = "thyi"
     }
@@ -33,7 +34,7 @@ class Thyi(var baseUrl: String = "",
         Log.i(TAG, "send: " + request.url().toString())
         val onSubscribe = ObservableOnSubscribe<T> { e ->
             try {
-                val response = client.newCall(request).execute()
+                val response = okhttp.newCall(request).execute()
                 when (typeOfT) {
                     InputStream::class.java -> {
                         e.onNext(response.body()!!.byteStream() as T)
