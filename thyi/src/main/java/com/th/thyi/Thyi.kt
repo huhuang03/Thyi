@@ -4,10 +4,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.google.gson.Gson
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableOnSubscribe
+import io.reactivex.rxjava3.schedulers.Schedulers
+import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -26,18 +27,31 @@ class Thyi(var baseUrl: String = "",
         const val TAG = "thyi"
     }
 
+    fun <T>post(url: String, classOfT: Class<T>): Observable<T> {
+        return request(Request.Builder()
+                .method("POST", FormBody.Builder().build())
+                .url(url).build(), classOfT)
+    }
+
+    fun <T>get(url: String, classOfT: Class<T>): Observable<T> {
+        return request(Request.Builder()
+                .method("GET", FormBody.Builder().build())
+                .url(url).build(), classOfT)
+    }
+
+
     fun <T>request(request: Request, classOfT: Class<T>): Observable<T> {
         return request(request, classOfT as Type)
     }
 
     fun <T>request(request: Request, typeOfT: Type): Observable<T> {
-        Log.i(TAG, "send: " + request.url().toString())
+        Log.i(TAG, "send: " + request.url.toString())
         val onSubscribe = ObservableOnSubscribe<T> { e ->
             try {
                 val response = okhttp.newCall(request).execute()
                 when (typeOfT) {
                     InputStream::class.java -> {
-                        e.onNext(response.body()!!.byteStream() as T)
+                        e.onNext(response.body!!.byteStream() as T)
                         e.onComplete()
                     }
                     Response::class.java -> {
@@ -45,7 +59,7 @@ class Thyi(var baseUrl: String = "",
                         e.onComplete()
                     }
                     Bitmap::class.java -> {
-                        val inputStream = response.body()!!.byteStream()
+                        val inputStream = response.body!!.byteStream()
                         var bitmap: Bitmap? = BitmapFactory.decodeStream(inputStream)
                         response.close()
                         if (bitmap == null) {
@@ -55,9 +69,9 @@ class Thyi(var baseUrl: String = "",
                         e.onComplete()
                     }
                     else -> {
-                        val str = response.body()!!.string()
+                        val str = response.body!!.string()
                         response.close()
-                        Log.i(TAG, "rst: " + str + "\n\t for url: " + request.url())
+                        Log.i(TAG, "rst: " + str + "\n\t for url: " + request.url)
                         val bean: T
 
                         bean = when (typeOfT) {
@@ -65,7 +79,7 @@ class Thyi(var baseUrl: String = "",
                             JSONObject::class.java -> JSONObject(str) as T
                             else ->  {
                                 if (str == "") {
-                                    throw IllegalStateException("request failed: ${request.url()}")
+                                    throw IllegalStateException("request failed: ${request.url}")
                                 }
                                 Gson().fromJson(str, typeOfT)
                             }

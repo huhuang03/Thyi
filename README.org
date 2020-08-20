@@ -1,5 +1,7 @@
 #+MACRO: imglnk @@html:<a href="$1"><img src="$2"></a>@@
 
+IMPORTANT: Because I'm not good at maintain a open source project, so you should *not* use this project.
+
 okhttp wrapper
 
 * Install
@@ -35,3 +37,6 @@ var thyi = Thyi();
 thyi.request(request, rstType: Class).map{doSomething()}.subscirbe()
 #+END_SRC
 
+
+* TODOS
+impl api define
