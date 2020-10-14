@@ -52,26 +52,29 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
-apply plugin: 'com.novoda.bintray-release'
+// this is for upload package. But when used as sub project.
+// The error is: https://blog.csdn.net/wo17796452/article/details/106638081
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.novoda:bintray-release:0.9.2'
-    }
-}
-
-publish {
-    userOrg = 'huhuang03'
-    groupId = 'com.th.android'
-    artifactId = 'thyi'
-    publishVersion = '1.7.6'
-    desc = 'For my use only, you should not use this project.'
-    website = 'https://github.com/huhuang03/thyi'
-}
-
-tasks.withType(Javadoc).all {
-    excludes = ['**/*.kt']
-}
+//apply plugin: 'com.novoda.bintray-release'
+//
+//buildscript {
+//    repositories {
+//        jcenter()
+//    }
+//    dependencies {
+//        classpath 'com.novoda:bintray-release:0.9.2'
+//    }
+//}
+//
+//publish {
+//    userOrg = 'huhuang03'
+//    groupId = 'com.th.android'
+//    artifactId = 'thyi'
+//    publishVersion = '1.7.6'
+//    desc = 'For my use only, you should not use this project.'
+//    website = 'https://github.com/huhuang03/thyi'
+//}
+//
+//tasks.withType(Javadoc).all {
+//    excludes = ['**/*.kt']
+//}

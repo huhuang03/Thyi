@@ -8,23 +8,33 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableOnSubscribe
 import io.reactivex.rxjava3.schedulers.Schedulers
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.json.JSONObject
 import java.io.InputStream
 import java.lang.IllegalStateException
 import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
-class Thyi(var baseUrl: String = "",
-           var okhttp: OkHttpClient = OkHttpClient.Builder()
+
+class Thyi(var okhttp: OkHttpClient = OkHttpClient.Builder()
                    .readTimeout(20, TimeUnit.SECONDS)
                    .build()) {
 
     companion object {
         const val TAG = "thyi"
+    }
+
+    fun <T> post(url: String, form: Map<String, String>, classOfT: Class<T>): Observable<T> {
+        return request(Request.Builder()
+                .method("POST"
+                    , FormBody.Builder().apply {
+                        for (item in form) {
+                            this.add(item.key, item.value)
+                        }
+                    }
+                .build())
+                .url(url).build(), classOfT)
     }
 
     fun <T>post(url: String, classOfT: Class<T>): Observable<T> {
@@ -34,9 +44,17 @@ class Thyi(var baseUrl: String = "",
     }
 
     fun <T>get(url: String, classOfT: Class<T>): Observable<T> {
+        return get(url, emptyMap(), classOfT)
+    }
+
+    fun <T> get(url: String, query: Map<String, String>, classOfT: Class<T>): Observable<T> {
         return request(Request.Builder()
-                .method("GET", FormBody.Builder().build())
-                .url(url).build(), classOfT)
+            .method("GET", FormBody.Builder().build())
+            .url(url.toHttpUrl().newBuilder().apply {
+                for (item in query) {
+                    addQueryParameter(item.key, item.value)
+                }
+            }.build().toUrl()).build(), classOfT)
     }
 
 
