@@ -10,11 +10,14 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.InputStream
 import java.lang.IllegalStateException
 import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
+import kotlin.reflect.typeOf
 
 
 class Thyi(var okhttp: OkHttpClient = OkHttpClient.Builder()
@@ -43,13 +46,19 @@ class Thyi(var okhttp: OkHttpClient = OkHttpClient.Builder()
                 .url(url).build(), classOfT)
     }
 
+    fun <T>postJson(url: String, json: String, classOfT: Class<T>): Observable<T> {
+        return request(Request.Builder()
+            .method("POST", json.toRequestBody("application/json".toMediaTypeOrNull()))
+            .url(url).build(), classOfT)
+    }
+
     fun <T>get(url: String, classOfT: Class<T>): Observable<T> {
         return get(url, emptyMap(), classOfT)
     }
 
     fun <T> get(url: String, query: Map<String, String>, classOfT: Class<T>): Observable<T> {
         return request(Request.Builder()
-            .method("GET", FormBody.Builder().build())
+            .method("GET", null)
             .url(url.toHttpUrl().newBuilder().apply {
                 for (item in query) {
                     addQueryParameter(item.key, item.value)
@@ -63,7 +72,7 @@ class Thyi(var okhttp: OkHttpClient = OkHttpClient.Builder()
     }
 
     fun <T>request(request: Request, typeOfT: Type): Observable<T> {
-        Log.i(TAG, "send: " + request.url.toString())
+        Log.i(TAG, "send: ${request.url.toString()}, method: ${request.method}")
         val onSubscribe = ObservableOnSubscribe<T> { e ->
             try {
                 val response = okhttp.newCall(request).execute()
