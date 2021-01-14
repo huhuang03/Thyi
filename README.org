@@ -7,7 +7,13 @@ okhttp wrapper
 * Install
   [[https://api.bintray.com/packages/huhuang03/maven/thyi/images/download.svg]]
 #+BEGIN_SRC gradle
-implementation 'com.th.android:thyi:1.x.x'
+repositories {
+    maven {
+        url 'https://dl.bintray.com/huhuang03/maven'
+    }
+}
+
+implementation 'com.th.android:thyi:1.7.7'
 #+END_SRC
 
 * Usage
