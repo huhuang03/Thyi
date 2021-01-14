@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+
 android {
     compileSdkVersion 29
 
@@ -41,9 +42,9 @@ buildscript {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api('com.squareup.okhttp3:okhttp:4.0.1') { setTransitive(true) }
+    api('com.squareup.okhttp3:okhttp:4.9.0') { setTransitive(true) }
     api('io.reactivex.rxjava3:rxandroid:3.0.0') { setTransitive(true) }
-    api('io.reactivex.rxjava3:rxjava:3.0.5') { setTransitive(true) }
+    api('io.reactivex.rxjava3:rxjava:3.0.6') { setTransitive(true) }
     api('com.google.code.gson:gson:2.8.6') { setTransitive(true) }
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -52,9 +53,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
-// this is for upload package. But when used as sub project.
-// The error is: https://blog.csdn.net/wo17796452/article/details/106638081
 
+// https://github.com/novoda/bintray-release/issues/298
 //apply plugin: 'com.novoda.bintray-release'
 //
 //buildscript {
@@ -70,8 +70,8 @@ dependencies {
 //    userOrg = 'huhuang03'
 //    groupId = 'com.th.android'
 //    artifactId = 'thyi'
-//    publishVersion = '1.7.6'
-//    desc = 'For my use only, you should not use this project.'
+//    publishVersion = '1.7.7'
+//    desc = "It's a android net library"
 //    website = 'https://github.com/huhuang03/thyi'
 //}
 //
